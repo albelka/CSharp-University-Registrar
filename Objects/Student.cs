@@ -189,6 +189,22 @@ namespace Registrar
       conn.Close();
     }
 
+    public void Enroll(int courseId)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO registrations VALUES (@CourseId, @StudentId);", conn);
+      cmd.Parameters.AddWithValue("@CourseId", courseId);
+      cmd.Parameters.AddWithValue("@StudentId", this.GetId());
+
+      cmd.ExecuteNonQuery();
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
     public int GetId()
     {
       return _id;

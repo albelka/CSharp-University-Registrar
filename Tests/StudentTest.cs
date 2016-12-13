@@ -103,9 +103,33 @@ namespace Registrar
       Assert.Equal(testStudentList, resultStudents);
     }
 
+    [Fact]
+    public void GetCourses_RetrievesCoursesRelatedToStudent()
+    {
+      //Arrange
+      Course testCourse1 = new Course("History 101", "HST101");
+      testCourse1.Save();
+      Course testCourse2 = new Course("English 101", "ENG101");
+      testCourse2.Save();
+      Course testCourse3 = new Course("Number Theory", "MTH340");
+      testCourse3.Save();
+
+      Student testStudent = new Student("Lucille Ball", DateTime.Today);
+      testStudent1.Save();
+
+      testStudent.Enroll(testCourse1.GetId());
+      testStudent.Enroll(testCourse2.GetId());
+      List<Course> expectedCourses = new List<Course> { testCourse1, testCourse2 };
+      //Act
+      List<Course> studentCourses = testStudent.GetCourses();
+      //Assert
+      Assert.Equal(expectedCourses, studentCourses);
+    }
+
     public void Dispose()
     {
       Student.DeleteAll();
+      Course.DeleteAll();
     }
   }
 }
