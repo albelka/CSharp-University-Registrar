@@ -1,0 +1,18 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+  var courses = Model.GetCourses();
+}
+<h3>@Model.GetName()</h3>
+
+<p><small>Enrolled: @Model.GetEnrollmentDate() </small></p>
+
+<h5>Courses: </h5>
+<ul>
+  @foreach (var course in courses)
+  {
+    <li>
+      <a href="/courses/@course.GetId()">@course.GetName()</a>
+      <p>@course.GetCourseNumber()</p>
+    </li>
+  }
+</ul>

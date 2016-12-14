@@ -1,0 +1,14 @@
+@{
+  Layout = "Shared/_Layout.cshtml";
+}
+<h3>@Model.GetName()</h3>
+<h4>@Model.GetCourseNumber()</h4>
+
+<h4>Students Enrolled:</h4>
+
+<ul>
+@foreach(var student in @Model.GetStudents())
+  {
+    <li>@student.GetName()</li>
+  }
+</ul>

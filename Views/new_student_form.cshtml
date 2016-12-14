@@ -1,0 +1,17 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+  var today = DateTime.Today;
+}
+<h3>New Student</h3>
+<form class="" action="/students/new" method="post">
+  <div class="row">
+    <div class="col-md-6">
+      <input type="text" class="form-control" name="student-name" placeholder="Student Name" required>
+      <input type="hidden" name="enrollment-date" value="@today">
+    </div>
+    <div class="col-md-6">
+      <button type="submit" class="btn btn-info">Register</button>
+    </div>
+  </div>
+</form>
+<br>

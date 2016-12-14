@@ -1,0 +1,33 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+  var students = Model["students"];
+  var courses = Model["courses"];
+}
+<h3>Register</h3>
+<div class="row">
+  <form method="post">
+    <div class="col-md-5">
+      <select class="form-control" name="course" placeholder="Course">
+        <option disabled selected>Course</option>
+        @foreach(var course in courses)
+        {
+          <option value="@course.GetId()">@course.GetName()</option>
+        }
+      </select>
+    </div>
+    <div class="col-md-5">
+      <select class="form-control" name="student" placeholder="Student">
+        <option disabled selected>Student</option>
+        @foreach(var student in students)
+        {
+          <option value="@student.GetId()">@student.GetName()</option>
+        }
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" formaction="/courses" class="btn btn-info">Enroll</button>
+      <button type="submit" formaction="/unenroll" class="btn btn-info">Unenroll</button>
+    </div>
+  </form>
+</div>
+<br>

@@ -39,6 +39,67 @@ namespace Registrar
       return _name.GetHashCode();
     }
 
+    public static void Enroll(int courseId, int studentId)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO registrations VALUES (@CourseId, @StudentId);", conn);
+      cmd.Parameters.AddWithValue("@CourseId", courseId);
+      cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+      cmd.ExecuteNonQuery();
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+    public static void UnEnroll(int courseId, int studentId)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM registrations WHERE course_id = @CourseId, student_id = @StudentId);", conn);
+      cmd.Parameters.AddWithValue("@CourseId", courseId);
+      cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+      cmd.ExecuteNonQuery();
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+    public List<Student> GetStudents()
+    {
+      List<Student> enrolledStudents = new List<Student> {};
+
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT students.* FROM courses JOIN registrations ON (courses.id = registrations.course_id) JOIN students ON (registrations.student_id = students.id) WHERE courses.id=@CourseId;", conn);
+
+      cmd.Parameters.AddWithValue("CourseId", this.GetId());
+
+      SqlDataReader rdr = cmd.ExecuteReader();
+      while(rdr.Read())
+      {
+        int studentId = rdr.GetInt32(0);
+        string studentName = rdr.GetString(1);
+        DateTime studentEnrollmentDate = rdr.GetDateTime(2);
+        Student newStudent = new Student(studentName, studentEnrollmentDate, studentId);
+        enrolledStudents.Add(newStudent);
+      }
+      if(rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+      return enrolledStudents;
+    }
+
     public static List<Course> GetAll()
     {
       SqlConnection conn = DB.Connection();

@@ -189,20 +189,33 @@ namespace Registrar
       conn.Close();
     }
 
-    public void Enroll(int courseId)
+    public List<Course> GetCourses()
     {
+      List<Course> studentCourses = new List<Course> {};
+
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO registrations VALUES (@CourseId, @StudentId);", conn);
-      cmd.Parameters.AddWithValue("@CourseId", courseId);
+      SqlCommand cmd = new SqlCommand("SELECT courses.* FROM students JOIN registrations ON (students.id = registrations.student_id) JOIN courses ON (registrations.course_id = courses.id) WHERE students.id = @StudentId", conn);
       cmd.Parameters.AddWithValue("@StudentId", this.GetId());
 
-      cmd.ExecuteNonQuery();
+      SqlDataReader rdr = cmd.ExecuteReader();
+      while (rdr.Read())
+      {
+        int courseId = rdr.GetInt32(0);
+        string courseName = rdr.GetString(1);
+        string courseNumber = rdr.GetString(2);
+        studentCourses.Add(new Course(courseName, courseNumber, courseId));
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
       if (conn != null)
       {
         conn.Close();
       }
+      return studentCourses;
     }
 
     public int GetId()

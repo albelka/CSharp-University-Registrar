@@ -115,10 +115,10 @@ namespace Registrar
       testCourse3.Save();
 
       Student testStudent = new Student("Lucille Ball", DateTime.Today);
-      testStudent1.Save();
+      testStudent.Save();
 
-      testStudent.Enroll(testCourse1.GetId());
-      testStudent.Enroll(testCourse2.GetId());
+      Course.Enroll(testCourse1.GetId(), testStudent.GetId());
+      Course.Enroll(testCourse2.GetId(), testStudent.GetId());
       List<Course> expectedCourses = new List<Course> { testCourse1, testCourse2 };
       //Act
       List<Course> studentCourses = testStudent.GetCourses();

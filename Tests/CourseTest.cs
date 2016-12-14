@@ -83,7 +83,7 @@ namespace Registrar
     //Assert
     Assert.Equal(expectedResult, testCourse);
     }
-    
+
     [Fact]
     public void Test_Delete_DeletesTaskFromDatabase()
     {
@@ -101,6 +101,32 @@ namespace Registrar
       //Assert
       Assert.Equal(testCourseList, resultCourses);
     }
+    [Fact]
+    public void Test_GetStudents_RetrievesStudentsEnrolledInACourse()
+    {
+      //Arrange
+      Course testCourse1 = new Course("History 101", "HST101");
+      testCourse1.Save();
+      Course testCourse2 = new Course("English 101", "ENG101");
+      testCourse2.Save();
+
+      Student testStudent = new Student("Lucille Ball", DateTime.Today);
+      testStudent.Save();
+      Student testStudent2 = new Student("Dezi Arnez", DateTime.Today);
+      testStudent2.Save();
+
+      Course.Enroll(testCourse1.GetId(), testStudent.GetId());
+      Course.Enroll(testCourse1.GetId(), testStudent2.GetId());
+      Course.Enroll(testCourse2.GetId(), testStudent2.GetId());
+
+      //Act
+      List<Student> enrolledStudents = testCourse1.GetStudents();
+      List<Student> expectedStudents = new List<Student> {testStudent, testStudent2};
+
+      //Assert
+      Assert.Equal(expectedStudents, enrolledStudents);
+    }
+
 
     public void Dispose()
     {
